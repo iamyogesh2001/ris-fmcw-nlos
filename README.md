@@ -1,13 +1,13 @@
 # RIS-Assisted FMCW Radar NLOS Detection
 
-**Paper:** *RIS-Assisted FMCW Radar Target Detection in NLOS Environments via CNN-Based Range-Doppler Processing*
+**Paper:** *RIS-Enabled Sensing in Electromagnetically Obstructed Environments: CNN-Based NLOS Target Detection via Range-Doppler Processing*
 
 **Authors:**
 - Yogesh Rethinapandian — University of Illinois at Chicago (yrethi2@uic.edu)
 - Kaushik Kumar — University of Arizona (kaushikkumar@arizona.edu)
 - Arun Karthik Sundararajan — Independent Researcher (arunkarthik.sundararajan@gmail.com)
 
-**Submitted to:** IEEE Antennas and Wireless Propagation Letters (AWPL)
+**Submitted to:** 2026 IEEE International Conference on Wireless for Space and Extreme Environments (WiSEE), under review.
 
 ---
 
@@ -15,7 +15,7 @@
 
 This repository contains the simulation framework, dataset generation pipeline, CNN training code, and all paper figures for our work on RIS-assisted FMCW radar target detection in non-line-of-sight (NLOS) environments.
 
-We propose a reconfigurable intelligent surface (RIS) passive antenna aperture architecture that redirects 77 GHz FMCW radar energy around physical obstructions toward NLOS targets. A 64-element RIS with 2-bit phase quantization achieves 36.1 dB coherent aperture gain, enabling CA-CFAR detection at SNR as low as −15 dB — a regime where conventional radar yields detection probability below 0.6%. A lightweight CNN trained on range-Doppler maps under realistic RIS impairment conditions achieves 98.33% test accuracy and AUC of 0.988.
+We propose a reconfigurable intelligent surface (RIS) passive antenna aperture architecture that redirects 77 GHz FMCW radar energy around physical obstructions toward NLOS targets. A 64-element RIS with 2-bit phase quantization achieves 36.1 dB coherent aperture gain, enabling CA-CFAR detection at SNR as low as −15 dB — a regime where conventional radar yields detection probability below 0.6%. A lightweight CNN trained on range-Doppler maps under realistic RIS impairment conditions achieves strong classification performance across all tested SNR levels.
 
 ---
 
@@ -29,11 +29,7 @@ We propose a reconfigurable intelligent surface (RIS) passive antenna aperture a
 | SNR at Pd=0.9, N=128, optimised | −15 dB |
 | SNR at Pd=0.9, N=64, random | −3 dB |
 | Max Pd, no RIS (CA-CFAR) | 0.006 |
-| CNN test accuracy | 98.33% |
-| CNN AUC | 0.988 |
 | False alarm rate | 0.14% |
-| Best training epoch | 54 / 60 |
-| CNN trainable parameters | 336,865 |
 
 ---
 
@@ -55,7 +51,7 @@ ris-fmcw-nlos/
 ├── fig3_pd_money.png           # Optimised vs Random vs No RIS at N=64
 ├── fig4_gain_vs_N_fixed.png    # Beamforming gain: N² vs N aperture scaling
 ├── fig5_training_curves.png    # CNN training and validation loss/accuracy curves
-└── fig6_roc_confusion.png      # ROC curve (AUC=0.988) and confusion matrix
+└── fig6_roc_confusion.png      # ROC curve and confusion matrix
 ```
 
 ---
@@ -113,7 +109,7 @@ This creates a `dataset_imperfect/` directory with `present/` and `absent/` subf
 
 ## CNN Architecture
 
-Three convolutional blocks (channel depths 32, 64, 128; 3×3 kernels; batch normalisation; ReLU activation; 2×2 max pooling; spatial dropout 0.3), followed by global average pooling and two fully connected layers (256 → 64 → 1) with sigmoid output. Total trainable parameters: 336,865.
+Three convolutional blocks (channel depths 32, 64, 128; 3×3 kernels; batch normalisation; ReLU activation; 2×2 max pooling; spatial dropout 0.3), followed by global average pooling and two fully connected layers (256 → 64 → 1) with sigmoid output.
 
 ### Training Configuration
 
@@ -187,11 +183,11 @@ Optimised RIS tracks the N² theoretical bound precisely (36.1 dB at N=64). Rand
 
 ### Fig 5 — CNN Training Curves
 ![Training](fig5_training_curves.png)
-Training loss remains above 0.1 throughout all 60 epochs confirming label smoothing is effective. Validation loss consistently below training loss. Best epoch at 54.
+Training and validation loss/accuracy curves across all epochs. Label smoothing (ε = 0.1) is applied throughout training.
 
 ### Fig 6 — ROC Curve and Confusion Matrix
 ![ROC](fig6_roc_confusion.png)
-AUC = 0.988, test accuracy = 98.33% on 1,440 held-out samples. 23 missed detections, 1 false alarm. False alarm rate: 0.14%.
+ROC curve and confusion matrix on held-out test samples under realistic RIS impairment conditions.
 
 ---
 
@@ -200,14 +196,15 @@ AUC = 0.988, test accuracy = 98.33% on 1,440 held-out samples. 23 missed detecti
 If you use this code or results in your research, please cite:
 
 ```bibtex
-@article{rethinapandian2026ris,
-  title={RIS-Assisted FMCW Radar Target Detection in NLOS Environments
-         via CNN-Based Range-Doppler Processing},
-  author={Rethinapandian, Yogesh and Kumar, Kaushik and
-          Sundararajan, Arun Karthik},
-  journal={IEEE Antennas and Wireless Propagation Letters},
-  year={2026},
-  note={Under review}
+@inproceedings{rethinapandian2026ris,
+  title     = {RIS-Enabled Sensing in Electromagnetically Obstructed Environments:
+               CNN-Based NLOS Target Detection via Range-Doppler Processing},
+  author    = {Rethinapandian, Yogesh and Kumar, Kaushik and
+               Sundararajan, Arun Karthik},
+  booktitle = {Proc. 2026 IEEE Int. Conf. Wireless for Space and Extreme
+               Environments (WiSEE)},
+  year      = {2026},
+  note      = {Under review}
 }
 ```
 
