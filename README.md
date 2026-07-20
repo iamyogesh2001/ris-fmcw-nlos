@@ -1,13 +1,31 @@
 # RIS-Assisted FMCW Radar NLOS Detection
 
+> **This paper has been accepted at IEEE WiSEE 2026 for poster presentation. Camera-ready manuscript submitted July 20, 2026.**
+
 **Paper:** *RIS-Enabled Sensing in Electromagnetically Obstructed Environments: CNN-Based NLOS Target Detection via Range-Doppler Processing*
 
 **Authors:**
 - Yogesh Rethinapandian — University of Illinois at Chicago (yrethi2@uic.edu)
 - Kaushik Kumar — University of Arizona (kaushikkumar@arizona.edu)
-- Arun Karthik Sundararajan — Independent Researcher (arunkarthik.sundararajan@gmail.com)
+- Arun Karthik Sundararajan — IEEE Member, USA (arunkarthik@ieee.org)
+- Smrithi Prakash — SRM Institute of Science and Technology, Chennai, India (sp9114@srmist.edu.in)
 
-**Submitted to:** 2026 IEEE International Conference on Wireless for Space and Extreme Environments (WiSEE), under review.
+---
+
+## Publication Status
+
+| Stage | Status |
+|-------|--------|
+| Submission | ✅ Submitted |
+| Peer Review | ✅ Reviewed |
+| Decision | ✅ **Accepted (Poster)** |
+| Camera-Ready | ✅ Submitted — July 20, 2026 |
+| IEEE Xplore | 🔄 Pending Publication |
+
+**Conference:** 14th IEEE International Conference on Wireless for Space and Extreme Environments (WiSEE 2026)
+**Date:** September 14–16, 2026 — Leuven, Belgium
+**Track:** Poster Presentation
+**IEEE Xplore DOI:** TBD
 
 ---
 
@@ -15,7 +33,7 @@
 
 This repository contains the simulation framework, dataset generation pipeline, CNN training code, and all paper figures for our work on RIS-assisted FMCW radar target detection in non-line-of-sight (NLOS) environments.
 
-We propose a reconfigurable intelligent surface (RIS) passive antenna aperture architecture that redirects 77 GHz FMCW radar energy around physical obstructions toward NLOS targets. A 64-element RIS with 2-bit phase quantization achieves 36.1 dB coherent aperture gain, enabling CA-CFAR detection at SNR as low as −15 dB — a regime where conventional radar yields detection probability below 0.6%. A lightweight CNN trained on range-Doppler maps under realistic RIS impairment conditions achieves strong classification performance across all tested SNR levels.
+We propose a reconfigurable intelligent surface (RIS) passive antenna aperture architecture that redirects 77 GHz FMCW radar energy around physical obstructions toward NLOS targets. A 64-element RIS with 2-bit phase quantization achieves 36.1 dB coherent aperture gain, enabling CA-CFAR detection at SNR as low as -15 dB, a regime where conventional radar yields detection probability below 0.6%. A lightweight CNN trained on range-Doppler maps under realistic RIS impairment conditions achieves 98.33% accuracy and AUC of 0.988 across all tested SNR levels.
 
 ---
 
@@ -26,10 +44,15 @@ We propose a reconfigurable intelligent surface (RIS) passive antenna aperture a
 | RIS aperture gain, optimised N=64 | 36.1 dB |
 | RIS aperture gain, random N=64 | 18.1 dB |
 | Coherence advantage (opt. vs. rand.) | 18.0 dB |
-| SNR at Pd=0.9, N=128, optimised | −15 dB |
-| SNR at Pd=0.9, N=64, random | −3 dB |
+| SNR at Pd=0.9, N=128, optimised | -15 dB |
+| SNR at Pd=0.9, N=64, optimised | -15 dB |
+| SNR at Pd=0.9, N=64, random | -3 dB |
 | Max Pd, no RIS (CA-CFAR) | 0.006 |
+| CNN test accuracy | 98.33% |
+| CNN AUC | 0.988 |
+| CNN vs. CA-CFAR AUC advantage | +0.278 |
 | False alarm rate | 0.14% |
+| Training dataset size | 14,400 |
 
 ---
 
@@ -83,7 +106,7 @@ ris-fmcw-nlos/
 Aggregate RIS gain efficiency modelled as η ~ Beta(2,1), with mean η̄ = 2/3, producing a 3.5 dB mean reduction from the ideal N² bound and per-sample variation that drives genuine classification difficulty.
 
 ### Clutter Model
-- K-distribution clutter: texture g ~ Gamma(0.5, 1), CNR = −8 dB
+- K-distribution clutter: texture g ~ Gamma(0.5, 1), CNR = -8 dB
 - 2 to 4 competing multipath reflectors within ±6 m range and ±3 m/s velocity of the target bin
 - Unit-variance AWGN throughout both classes
 
@@ -93,9 +116,9 @@ Aggregate RIS gain efficiency modelled as η ~ Beta(2,1), with mean η̄ = 2/3, 
 
 **14,400 labeled 64×64 RDM crops** equally split between present (optimised RIS with impairments) and absent (clutter only) classes.
 
-- SNR range: −15 to +20 dB (36 levels, 200 frames per level per class)
+- SNR range: -15 to +20 dB (36 levels, 200 frames per level per class)
 - Train / Validation / Test split: 80 / 10 / 10
-- At −15 dB SNR: 43% sample-level class ambiguity
+- At -15 dB SNR: 43% sample-level class ambiguity
 
 The dataset is not included in this repository due to size. To regenerate it from scratch, run:
 
@@ -175,19 +198,19 @@ CA-CFAR Pd vs input SNR for N = 16, 32, 64, 128. No-RIS baseline remains below 0
 
 ### Fig 3 — Optimised vs Random vs No RIS
 ![Pd comparison](fig3_pd_money.png)
-At N = 64, optimised RIS achieves near-perfect detection from −15 dB. Random RIS lags by 12 dB. No-RIS CA-CFAR fails completely throughout.
+At N = 64, optimised RIS achieves near-perfect detection from -15 dB. Random RIS lags by 12 dB. No-RIS CA-CFAR fails completely throughout.
 
 ### Fig 4 — Beamforming Gain vs Element Count
 ![Gain vs N](fig4_gain_vs_N_fixed.png)
-Optimised RIS tracks the N² theoretical bound precisely (36.1 dB at N=64). Random configuration achieves N gain (18.1 dB), an 18 dB deficit attributable entirely to incoherent aperture combining.
+Optimised RIS tracks the N² theoretical bound precisely (36.1 dB at N=64). Random configuration achieves N gain (18.1 dB), an 18 dB deficit from incoherent aperture combining.
 
 ### Fig 5 — CNN Training Curves
 ![Training](fig5_training_curves.png)
-Training and validation loss/accuracy curves across all epochs. Label smoothing (ε = 0.1) is applied throughout training.
+Training and validation loss/accuracy curves across all epochs. Label smoothing (ε = 0.1) applied throughout.
 
 ### Fig 6 — ROC Curve and Confusion Matrix
 ![ROC](fig6_roc_confusion.png)
-ROC curve and confusion matrix on held-out test samples under realistic RIS impairment conditions.
+ROC curve and confusion matrix on 1,440 held-out test samples. CNN achieves 98.33% accuracy, AUC 0.988, and false alarm rate 0.14% under realistic RIS impairment conditions.
 
 ---
 
@@ -200,11 +223,13 @@ If you use this code or results in your research, please cite:
   title     = {RIS-Enabled Sensing in Electromagnetically Obstructed Environments:
                CNN-Based NLOS Target Detection via Range-Doppler Processing},
   author    = {Rethinapandian, Yogesh and Kumar, Kaushik and
-               Sundararajan, Arun Karthik},
-  booktitle = {Proc. 2026 IEEE Int. Conf. Wireless for Space and Extreme
-               Environments (WiSEE)},
+               Sundararajan, Arun Karthik and Prakash, Smrithi},
+  booktitle = {Proc. 14th IEEE Int. Conf. Wireless for Space and Extreme
+               Environments (WiSEE 2026)},
+  address   = {Leuven, Belgium},
+  month     = {September},
   year      = {2026},
-  note      = {Under review}
+  note      = {Accepted for poster presentation}
 }
 ```
 
